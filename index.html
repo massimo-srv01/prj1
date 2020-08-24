@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-database.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyBTq7RZccrCvK1NsHLn2Ys-I7TXdcCD_YI",
+        authDomain: "prj1-40cf8.firebaseapp.com",
+        databaseURL: "https://prj1-40cf8.firebaseio.com",
+        projectId: "prj1-40cf8",
+        storageBucket: "prj1-40cf8.appspot.com",
+        messagingSenderId: "236794153435",
+        //appId: "1:236794153435:web:82afaa94c15bc7799e3ffe"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+      var database = firebase.database();
+    
+    function myFunctionClear() {
+      
+      document.getElementById("output2").innerHTML = "";
+    } 
+
+    setDataRef = database.ref("/uno");
+    setDataRef.on('value', function(snapshot) {
+      console.log("Below is the data from child_changed");
+      console.log(snapshot.val());
+      document.getElementById("output3").innerHTML += snapshot.val().string+"<br>";
+    });
+
+    </script>
+  </head>
+<body>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+
+
+<p id="output2"> </p>
+<div> <textarea name="outpu1" id="" cols="30" rows="10"></textarea></div>
+<div><input id="input1" type="text" value="prova"></div>
+<div>
+    <button onclick="myFunction()" type="submit">Submit </button>
+    <button onclick="myFunctionClear()" type="submit">Clear </button>
+</div>
+<p id="output3">  fffff</p>
+ <div><img src="circle.png" alt="A" style="width:42px;height:42px;"></div>
+  <div><img src="circle.png" alt="A" style="width:42px;height:42px;"></div>
+   <div><img src="cross.png" alt="A" style="width:42px;height:42px;"></div>
+
+   <div><img src="circle.png" alt="A" style="width:42px;height:42px;">
+    <img src="blank.png" alt="A" style="width:42px;height:42px;">
+    <img src="cross.png" alt="A" style="width:42px;height:42px;"></div>
+ 
+  </body>
+
+<script>
+  function myFunction() {
+  //document.getElementById("output1").innerHTML = "Hello World";
+  //document.getElementById("output2").innerHTML = "Hello World";
+
+  var testo=document.getElementById("input1").value;
+  console.log("t="+testo);
+  document.getElementById("output2").innerHTML += testo+"<br>";
+  //document.getElementById("input1").value = "hhhhhhhh"
+  //var database = firebase.database();
+  //database.ref('uno').set({string: testo});
+  firebase.database().ref('uno').set({string: testo});
+}
+</script>
+</html>
