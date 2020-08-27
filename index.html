@@ -27,12 +27,42 @@
       
       document.getElementById("output2").innerHTML = "";
     } 
+var Global_Griglia1="";
+var Global_TurnoG1="";
 
     setDataRef = database.ref("/uno");
     setDataRef.on('value', function(snapshot) {
       console.log("Below is the data from child_changed");
       console.log(snapshot.val());
       document.getElementById("output3").innerHTML += snapshot.val().string+"<br>";
+    });
+    setDataRefG1 = database.ref("/griglia1/griglia");
+    setDataRefG1.on('value', function(snapshot) {
+      console.log("Griglia1="+snapshot.val().griglia);
+      document.getElementById("outputG1").innerHTML = snapshot.val().griglia+"<br>";
+      Global_Griglia1=snapshot.val().griglia;
+      var indice = "ciao";
+      for (i=0; i<9;i++) {
+        var c=Global_Griglia1.charAt(i);
+        //var k=i+1;
+        indice=(i+1).toString();
+        console.log("c="+c+" i+1="+indice);
+        
+        if (c=="X") {
+          document.getElementById(indice).src="cross.png";
+
+        } else if (c=="O") {
+          document.getElementById(indice).src="circle.png";
+        } else {
+          document.getElementById(indice).src="blank.png";
+        }
+      }
+    });
+    setDataRefTG1 = database.ref("/griglia1/turno");
+    setDataRefTG1.on('value', function(snapshot) {
+      console.log("Turno Griglia1="+snapshot.val().turno);
+      document.getElementById("outputTG1").innerHTML = snapshot.val().turno+"<br>";
+      Global_TurnoG1=snapshot.val().turno;
     });
 
     </script>
@@ -53,17 +83,26 @@
     <button onclick="myFunctionClear()" type="submit">Clear </button>
 </div>
 <p id="output3">  fffff</p>
- <div><img src="circle.png" alt="A" style="width:42px;height:42px;"></div>
-  <div><img src="circle.png" alt="A" style="width:42px;height:42px;"></div>
-   <div><img src="cross.png" alt="A" style="width:42px;height:42px;"></div>
-
-   <div><img src="circle.png" alt="A" style="width:42px;height:42px;">
-    <img src="blank.png" alt="A" style="width:42px;height:42px;">
-    <img src="cross.png" alt="A" style="width:42px;height:42px;"></div>
+ <div><img src="circle.png" alt="A" style="width:42px;height:42px;">
+  <img src="cross.png" alt="A" style="width:42px;height:42px;"></div>
+   <p id="outputG1">  outputG1</p> <p id="outputTG1">  outputTG1</p>
+   <button onclick="resetGriglia1()" type="submit">Reset Griglia1</button>
+   <div><img id="1" src="circle.png" alt="A" style="width:42px;height:42px;" onclick="cambia(1)">
+    <img id="2" src="blank.png" alt="A" style="width:42px;height:42px;" onclick="cambia(2)">
+    <img id="3" src="cross.png" alt="A" style="width:42px;height:42px;" onclick="cambia(3)"></div>
  
+  <div><img id="4" src="circle.png" alt="A" style="width:42px;height:42px;" onclick="cambia(4)">
+      <img id="5" src="blank.png" alt="A" style="width:42px;height:42px;" onclick="cambia(5)">
+      <img id="6" src="cross.png" alt="A" style="width:42px;height:42px;" onclick="cambia(6)">  </div>
+ 
+  <div><img id="7" src="circle.png" alt="A" style="width:42px;height:42px;" onclick="cambia(7)">
+        <img id="8" src="blank.png" alt="A" style="width:42px;height:42px;" onclick="cambia(8)">
+        <img id="9" src="cross.png" alt="A" style="width:42px;height:42px;" onclick="cambia(9)"> </div>
+       
   </body>
 
 <script>
+
   function myFunction() {
   //document.getElementById("output1").innerHTML = "Hello World";
   //document.getElementById("output2").innerHTML = "Hello World";
@@ -76,5 +115,39 @@
   //database.ref('uno').set({string: testo});
   firebase.database().ref('uno').set({string: testo});
 }
+  function cambia(casella){
+    //document.getElementById(casella).src="cross.png";
+    //document.getElementById(casella).alt="cross.png";
+    console.log("letturadb=" + firebase.database().ref('griglia1/griglia'));
+    console.log("before:Global_Griglia1=" + Global_Griglia1+" Turno"+Global_TurnoG1);
+    if (Global_Griglia1.charAt(casella-1)!="X" && Global_Griglia1.charAt(casella-1)!="O") {
+      var pre=Global_Griglia1.substring(0,casella-1);
+      var post=Global_Griglia1.substring(casella);
+      var nuova=pre+Global_TurnoG1+post;
+      console.log("after:" + pre +"-"+post+"->"+nuova);
+      firebase.database().ref('griglia1/griglia').set({griglia: nuova});
+
+    
+    if (Global_TurnoG1=="X") {
+      //document.getElementById(casella).src="cross.png";
+      //document.getElementById(casella).alt="X";
+      firebase.database().ref('griglia1/turno').set({turno: "O"});
+    } else {
+      //document.getElementById(casella).src="circle.png";
+      //document.getElementById(casella).alt="O";
+      firebase.database().ref('griglia1/turno').set({turno: "X"});
+    }
+    }
+  }
+
+  function resetGriglia1() {
+    var turnoG1="X";
+    var Griglia1="123456789";
+
+    firebase.database().ref('griglia1/griglia').set({griglia: Griglia1});
+    firebase.database().ref('griglia1/turno').set({turno: turnoG1});
+
+
+  }
 </script>
 </html>
